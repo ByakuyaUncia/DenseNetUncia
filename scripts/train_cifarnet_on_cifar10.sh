@@ -37,22 +37,43 @@ python download_and_convert_data.py \
 
 # Run training.
 python train_image_classifier.py \
-  --train_dir=${TRAIN_DIR} \
+  --train_dir=/tmp/cifarnet-model \
   --dataset_name=cifar10 \
   --dataset_split_name=train \
-  --dataset_dir=${DATASET_DIR} \
-  --model_name=cifarnet \
-  --preprocessing_name=cifarnet \
-  --max_number_of_steps=100000 \
-  --batch_size=128 \
+  --dataset_dir=/tmp/cifar10 \
+  --model_name=densenet \
+  --batch_size=32 \
   --save_interval_secs=120 \
   --save_summaries_secs=120 \
   --log_every_n_steps=100 \
   --optimizer=sgd \
-  --learning_rate=0.1 \
+  --learning_rate=0.001 \
   --learning_rate_decay_factor=0.1 \
   --num_epochs_per_decay=200 \
   --weight_decay=0.004
+  
+python train_image_classifier.py \
+  --dataset_name=cifar10 \
+  --dataset_dir=/tmp/cifar10 \
+  --model_name=inception_v4 \
+  --train_dir=/tmp/cifar10-inception_v4-model \
+  --learning_rate=0.001 \
+  --optimizer=rmsprop \
+  --batch_size=32 \
+  --clone_on_cpu=True
+  
+python train_image_classifier.py \
+  --dataset_name=cifar10 \
+  --dataset_dir=/tmp/cifar10 \
+  --model_name=densenet \
+  --train_dir=/tmp/cifarnet-model \
+  --learning_rate=0.1 \
+  --optimizer=rmsprop  \
+  --batch_size=16\
+  --clone_on_cpu=True
+  
+  
+  python train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/cifar10 --model_name=inception_v4 --checkpoint_exclude_scopes=InceptionV4/Logits,InceptionV4/AuxLogits/Aux_logits --train_dir=/tmp/to/train_ckpt --learning_rate=0.001 --optimizer=rmsprop  --batch_size=32
 
 # Run evaluation.
 python eval_image_classifier.py \
