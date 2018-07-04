@@ -18,7 +18,10 @@ def trunc_normal(stddev): return tf.truncated_normal_initializer(stddev=stddev)
 def bn_act_conv_drp(current, num_outputs, kernel_size, scope='block'):
     current = slim.batch_norm(current, scope=scope + '_bn')
     current = tf.nn.relu(current)
-    current = slim.conv2d(current, num_outputs, kernel_size, scope=scope + '_conv',weights_initializer=initializer,weights_regularizer=regularizer)
+    current = slim.conv2d(current, num_outputs, kernel_size, 
+                          scope=scope  + '_conv',
+                          weights_initializer=initializer,
+                          weights_regularizer=regularizer,activation_fn=tf.nn.relu)
     current = slim.dropout(current, scope=scope + '_dropout')
     return current
 
@@ -67,7 +70,9 @@ def densenet(images, num_classes=1001, is_training=False,
     with tf.variable_scope(scope, 'DenseNet', [images, num_classes]):
         with slim.arg_scope(bn_drp_scope(is_training=is_training,
                                          keep_prob=dropout_keep_prob)) as ssc:
-            net=slim.conv2d(images,2*growth,[7,7],stride=2,scope=scope,weights_initializer=initializer,weights_regularizer=regularizer)
+            net=slim.conv2d(images,2*growth,[7,7],stride=2,scope=scope,
+                            weights_initializer=initializer,weights_regularizer=regularizer,
+                            activation_fn=tf.nn.relu)
             end_points[scope] = net
             
             scope='pool1'
