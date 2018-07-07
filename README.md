@@ -1,16 +1,24 @@
 修改了train_eval_image_classifier.py等文件以便适应于GPU训练。
+
 在本地用cifar10数据集进行测试，进行三万步后loss为0.8左右：
+
 INFO:tensorflow:global step 30000: loss = 0.7760 (0.367 sec/step)
 
 eval/Accuracy[0.718505859]
+
 eval/Recall_5[0.975097656]
 
 参数配置如下：
+
 python train_eval_image_classifier.py --train_dir=/tmp/to/log/train_ckpt --dataset_name=cifar10 --dataset_split_name=validation  --dataset_dir=/tmp/cifar10  --model_name=densenet  --preprocessing_name=densenet --batch_size=32  --learning_rate=0.01  --save_interval_secs=600  --save_summaries_secs=600   --log_every_n_steps=100  --optimizer=sgd   --learning_rate_decay_type=exponential --learning_rate_decay_factor=0.57  --num_epochs_per_decay=2
 
+
 # DenseNet的相关理解：
+
 growth：生长率。由于densenet每层的输入是之前所有层的输出，如果不加以限制，网络会生长太大，影响训练效率。因为限制每层产生k个特征，并把k限制到很小的数字，例如k=12。k也就是生长率growth。
+
 稠密链接：每一层的输入都是前面所有层的输出。这样的话，在特征传递的过程中就不会担心中间经过太多层卷积导致特征丢失，每一层都能最大限度地筛选、利用所有已经提取出来的特征。
+
 
 # 简介
 本代码为系列课程, 第七周部分的课后作业内容。
