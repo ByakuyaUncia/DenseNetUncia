@@ -83,23 +83,29 @@ python eval_image_classifier.py
 --max_num_batches=128
 
 python train_eval_image_classifier.py
- --dataset_name=quiz
+ --dataset_name=cifar10
  --dataset_dir=/tmp/cifar10 
  --model_name=densenet
+ --optimizer=sgd
  --checkpoint_exclude_scopes=densenet/DenseNet/Logits,densenet/DenseNet/AuxLogits/Aux_logits
- --train_dir=/path/to/log/train_ckpt 
- --learning_rate=0.1
- --dataset_split_name=validation
- --eval_dir=/path/to/eval_den
+ --train_dir=/tmp/to/log/train_ckpt 
+ --learning_rate=0.01
+ --learning_rate_decay_type=exponential
+ --learning_rate_decay_factor=0.57
+ --num_epochs_per_decay=2 
+ --dataset_split_name=test 
+ --eval_dir=/tmp/to/eval_den
  --max_num_batches=128
+ --allow_soft_placement=True
+ --clone_on_cpu=True
   
   python train_image_classifier.py --dataset_name=cifar10 --dataset_dir=/tmp/cifar10 --model_name=inception_v4 --checkpoint_exclude_scopes=InceptionV4/Logits,InceptionV4/AuxLogits/Aux_logits --train_dir=/tmp/to/train_ckpt --learning_rate=0.001 --optimizer=rmsprop  --batch_size=32
 
 # Run evaluation.
 python eval_image_classifier.py \
-  --checkpoint_path=/tmp/cifarnet-model \
-  --eval_dir=/tmp/cifarnet-model \
+  --checkpoint_path=/tmp/to/log/train_ckpt \
+  --eval_dir=/tmp/to/eval_den \
   --dataset_name=cifar10 \
   --dataset_split_name=test \
   --dataset_dir=/tmp/cifar10 \
-  --model_name=cifarnet
+  --model_name=densenet
